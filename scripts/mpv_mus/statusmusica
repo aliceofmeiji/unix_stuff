@@ -1,0 +1,49 @@
+#!/bin/sh
+repeat=$(cat /tmp/mpv_mus/status)
+playpause="$(cat /tmp/mpv_mus/playpause)"
+
+if [ "$1" = "ascii" ]; then
+	if [ "$repeat" = "repeat" ]; then
+		if [ "$playpause" = "play" ]; then
+			echo 'r u'
+		fi
+		if [ "$playpause" = "pause" ]; then
+			echo 'r >' 
+		fi
+		if [ "$playpause" = "stop" ]; then
+			echo 'r o'
+		fi
+	else
+		if [ "$playpause" = "play" ]; then
+			echo 's u'
+		fi
+		if [ "$playpause" = "pause" ]; then
+			echo 's >'
+		fi
+		if [ "$playpause" = "stop" ]; then
+			echo 's o'
+		fi
+	fi
+else
+	if [ "$repeat" = "repeat" ]; then
+		if [ "$playpause" = "play" ]; then
+			echo 🔁 ⏸
+		fi
+		if [ "$playpause" = "pause" ]; then
+			echo 🔁 ▶
+		fi
+		if [ "$playpause" = "stop" ]; then
+			echo 🔁 ⏹
+		fi
+	else
+		if [ "$playpause" = "play" ]; then
+			echo 🔀 ⏸
+		fi
+		if [ "$playpause" = "pause" ]; then
+			echo 🔀 ▶
+		fi
+		if [ "$playpause" = "stop" ]; then
+			echo 🔀 ⏹
+		fi
+	fi
+fi

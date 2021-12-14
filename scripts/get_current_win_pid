@@ -1,0 +1,2 @@
+#!/bin/sh
+xprop -id "$(xprop -root | grep "NET_ACTIVE_WINDOW(WINDOW)" | rev | cut -d ' ' -f 1 | rev)" | grep NET_WM_PID | cut -d ' ' -f 3

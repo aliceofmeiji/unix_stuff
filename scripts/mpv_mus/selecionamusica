@@ -1,0 +1,2 @@
+#!/bin/sh
+ls $1 /home/$USER/Musicas/ | $MENU -l 10 -i | add_songs_to_playlist

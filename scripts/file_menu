@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+	text="/"
+else
+	text="$1"
+fi
+
+while [ -d $text ]; do
+	selected=`ls -a $text | $MENU -l 10 -i`
+	[ -z $selected ] && exit 0;
+	text=$text/$selected
+done
+
+echo "$text"
+#printf "`cat $text`"

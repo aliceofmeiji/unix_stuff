@@ -1,0 +1,3 @@
+#!/bin/sh
+wal -n -i "$1" &
+feh --bg-tile "$1" 

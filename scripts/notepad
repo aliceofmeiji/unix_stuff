@@ -1,0 +1,6 @@
+#!/bin/sh
+touch /tmp/notepad_$USER
+cat /tmp/notepad_$USER | fmt -100 -s | $MENU -p "notepad" -l 10 -i -b | tee -a /tmp/notepad_$USER - | tr '\n' ' ';
+if [ `grep "$(tail -n 1 /tmp/notepad_$USER)" /tmp/notepad_$USER | wc -l` -gt 1 ]; then
+	sed -i '$ d' /tmp/notepad_$USER
+fi

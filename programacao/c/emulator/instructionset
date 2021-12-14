@@ -1,0 +1,18 @@
+ALU:
+	0X	Add	Ra, Rb, write in Rb
+	1X	SHR	Ra, write in Rb
+	2X	CMP	Ra, Rb and write to FLAG register
+	3X	AND	Ra, Rb, write in Rb
+	4X	OR	Ra, Rb, write in Rb
+	5X	XOR	Ra, Rb, write in Rb
+	6X	NOT	Ra, write in Rb
+	7X	SHL	Ra, write in Rb
+CU:
+	8X	CP	Ra, Rb
+	9X	JMP	FLAG, @+1, @+2	(take next two bytes as address to jump)
+	AX	CLF
+	BX	READ	Ra, @+1, @+2	(take next two bytes as address to copy)
+	CX	Write	Ra, @+1, @+2	(take next two bytes as address to write)
+	DX
+	EX
+	FX

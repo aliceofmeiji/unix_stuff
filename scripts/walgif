@@ -1,0 +1,2 @@
+#!/bin/sh
+gif.sh "$(ls /home/$USER/wallpapers/nightwaveplazagifs/*.gif | shuf -n 1)"

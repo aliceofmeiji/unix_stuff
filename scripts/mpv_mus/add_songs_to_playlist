@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ "$1" = "-f" ]; then
+	cat >> /tmp/mpv_mus/playlist
+else
+	sed "s/^/\/home\/$USER\/Musicas\//" >> /tmp/mpv_mus/playlist
+fi

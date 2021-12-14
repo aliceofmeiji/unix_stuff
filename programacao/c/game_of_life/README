@@ -1,0 +1,2 @@
+usage: game.sh xsize ysize born_rule survive_rule
+usage: gl xsize ysize born_rule survive_rule

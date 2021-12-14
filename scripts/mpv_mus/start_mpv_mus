@@ -1,0 +1,12 @@
+#!/bin/sh
+jack_mix_box -s -n mpv_mus 72 &
+midi=$(jack_lsp | sed -n "/WORLDE/ p" | sed -n "/capture/ p")
+mkdir /tmp/mpv_mus
+touch /tmp/mpv_mus/playlist
+echo -n 1 > /tmp/mpv_mus/current_song
+echo -n pause > /tmp/mpv_mus/playpause
+echo -n repeat > /tmp/mpv_mus/status
+sleep 1
+jack_connect "mpv_mus:MAIN L" system:playback_1
+jack_connect "mpv_mus:MAIN R" system:playback_2
+jack_connect "$midi" "mpv_mus:midi in"

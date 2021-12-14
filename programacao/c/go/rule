@@ -1,0 +1,7 @@
+try plotting a path (on empty verticies) between a point and one colour of stone.
+
+if you can then it might be part of that colour's territory.
+
+now try drawing a line between that point and the other colour of stone.
+
+if you can then its neutral territory and noone scores it. if you can't then it belongs to the other colour and is scored as theirs

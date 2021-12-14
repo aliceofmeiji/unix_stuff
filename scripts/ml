@@ -1,0 +1,9 @@
+#!/bin/sh
+#ls ~/.mutt/ | awk '{print NR, $1}'
+if [ -z "$1" ]; then
+	read -p "$(ls /home/$USER/.mutt/ | awk '{print NR, $1}')" choice
+else
+	choice=$1
+fi;
+neomutt -F $(ls /home/$USER/.mutt/* | sed -n "$choice p")
+#neomutt -F /home/$USER/.mutt/"$(read)"

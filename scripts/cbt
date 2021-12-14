@@ -1,0 +1,20 @@
+#!/bin/sh
+
+clear
+
+while [ 1 ]; do 
+
+	cube $@ #| tee -a - /tmp/cube; 
+
+	cat ~/text/cube/solve$1
+
+	INPUT="$(le -)"
+
+	case "$INPUT" in
+		"q") exit;
+		;;
+		"d") echo "dnf"
+		;;
+	esac
+
+done

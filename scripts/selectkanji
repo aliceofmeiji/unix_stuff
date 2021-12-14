@@ -1,0 +1,2 @@
+#!/bin/sh
+selected=$(cat ~/text/kanjilist | paste -d "| " - - | tr '\t' '|' | sed 's/|/ | /g' | cut -d "|" -f2,3,4,5,6,7,8,9,10 | $MENU -l 10 -i); [ -z "$selected" ] && exit; selected2=$(echo $selected | tr '|' '\n' | uniq | awk NF | $MENU -l 10 -i | tr '\n' ' ' | sed 's/ //g'); [ -z "$selected2" ] && exit; echo -n $selected2

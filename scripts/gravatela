@@ -1,0 +1,2 @@
+#!/bin/sh
+ffmpeg -y -f x11grab -s 1360x768 -i "$DISPLAY.0" /tmp/saida.mp4

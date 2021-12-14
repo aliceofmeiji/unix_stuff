@@ -1,0 +1,2 @@
+#!/bin/sh
+sed -n "$(cat /tmp/mpv_mus/current_song)"p < /tmp/mpv_mus/playlist

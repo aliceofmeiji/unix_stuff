@@ -1,0 +1,86 @@
+#!/bin/sh
+
+text="$(xclip -o -selection $1)"
+text="${text#${text%%[![:space:]]*}}"
+cd "$(cur_term_shell_path)"
+
+case "$text" in
+	*\(?\))
+		st -e man "$(printf $text | tr '(),.;:' ' ' | cut -d ' ' -f 2)" \
+		"$(printf $text | tr '(),.;:' ' ' | cut -d ' ' -f 1)"
+		exit
+	;;
+	*.mp4* | *.mov* | *.avi* | *.flv* | *.webm* | *.mp3* | *.ogg* | *.mkv*)
+		mpv "$text"
+		exit
+	;;
+	*.png* | *.jpg* | *.ff* | *.gif* | *.tif*)
+		xiv "$text"
+		exit
+	;;
+	*.pdf | *.epub | *.ps)
+		nz "$text"
+		exit
+	;;
+	http*://*youtube.com*)
+		sel="$(printf 'y youtube\nmdl download music\nmpv open mpv' | $MENU -l 10 -i)" 
+		case "$sel" in
+			y*)
+				qutebrowser "$text"
+				exit
+			;;
+			mdl*)
+				mdl "$text"
+				exit
+			;;
+			mpv*)
+				mpv "$text"	
+				exit
+			;;
+		esac
+	;;
+	http*://*)
+		qutebrowser "$text"
+		exit
+	;;
+esac
+
+if [ -d "$text" ]; then
+	st -e mksh -c "cd $text; mksh"
+	exit
+fi
+
+if [ -f "$text" ]; then
+	st -e mksh -c "source ~/.mkshrc; $EDITOR $text; mksh"
+	exit
+fi
+
+if [ "$(echo "$text" | tr -dc '0-9')" = "$text" ]; then
+	qutebrowser "https://help.quero.space/front/ticket.form.php?id=$text"
+	exit
+fi 
+
+#manual plumbing
+
+sel="$(printf 'y youtube\nmdl download music\nw wikipedia\nwe english wikipedia\n' | $MENU -l 10 -i)" 
+
+echo "$trash"
+
+
+case "$sel" in
+	y*)
+		qutebrowser "https://www.youtube.com/results?search_query=$text"
+		exit
+	;;
+	mdl*)
+		mdl "$text"
+		exit
+	;;
+	we*)
+		qutebrowser "https://en.wikipedia.org/w/index.php?title=Special:Search&search=$text"
+		exit
+	;;
+	w*)
+		qutebrowser "https://pt.wikipedia.org/w/index.php?title=Special:Search&search=$text"
+		exit
+esac

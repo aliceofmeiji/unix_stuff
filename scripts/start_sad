@@ -1,0 +1,16 @@
+#!/bin/sh
+jack_lsp > /tmp/jsad
+sad > /dev/null &
+sleep 0.1
+out=$(jack_lsp | diff - /tmp/jsad | sed -n 2p | sed "s/< //g" | sed "s/:.*//g")
+midi=$(jack_lsp | sed -n "/WORLDE/ p" | sed -n "/capture/ p")
+#jack_mixer -c ~/.jack_mixer/sad.xml & 
+jack_mix_box -s -n sad 72 &
+sleep 1
+jack_connect $out:out_000 "sad:Channel 1 L"
+jack_connect $out:out_001 "sad:Channel 1 R"
+jack_disconnect $out:out_000 system:playback_1
+jack_disconnect $out:out_001 system:playback_2
+jack_connect "sad:MAIN L" system:playback_1
+jack_connect "sad:MAIN R" system:playback_2
+jack_connect "$midi" "sad:midi in"

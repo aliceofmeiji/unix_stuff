@@ -1,0 +1,3 @@
+#!/bin/sh
+le - "$(genscramble $1 $2 | fmt -w `tput cols`)"
+snorecube | sed "s/^.\{57\}//" >> ~/text/cube/solve$1

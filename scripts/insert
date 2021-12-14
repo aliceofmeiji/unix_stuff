@@ -1,0 +1,13 @@
+#!/bin/sh
+
+cl=1 #current line
+string="$1"
+
+while read line; do
+	if [ "$cl" = "$2" ]; then
+		printf "%s\n" "$string"
+		shift 1
+	fi	
+	printf "%s\n" "$line"
+	cl=$(( cl + 1 ))
+done

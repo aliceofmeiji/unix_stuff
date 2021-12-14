@@ -1,0 +1,2 @@
+#!/bin/sh
+screenkey -s small -p top --opacity 0.3 -M

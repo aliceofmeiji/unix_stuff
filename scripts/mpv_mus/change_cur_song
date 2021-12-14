@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#while [ -z "$last_pid"]; do
+#done
+
+last_pid="$(ps -aux | grep mpv.*Musicas | grep -v grep | awk '{print $2}')";
+status="$(cat /tmp/mpv_mus/playpause)"
+
+if [ ! -z "$last_pid" ]; then 
+	kill $last_pid; 
+	kill -CONT $last_pid; 
+	killall play_cur_song; 
+fi
+
+if [ "$status" = "pause" ]; then
+	echo -n "play" > /tmp/mpv_mus/playpause
+	jack_connect "mpv_mus:MAIN L" system:playback_1;
+	jack_connect "mpv_mus:MAIN R" system:playback_2;
+fi
+
+echo $1 > /tmp/mpv_mus/current_song
+
+play_cur_song "$$"

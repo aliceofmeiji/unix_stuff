@@ -1,0 +1,2 @@
+#!/bin/sh
+amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2     | sed "s/://") sset Master "1$1"

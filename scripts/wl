@@ -1,0 +1,12 @@
+#!/bin/sh
+MENU="eval bemenu -p '' -H 17" export MENU
+CLIP="wl-copy -n" export CLIP
+#BROWSER="epiphany" export BROWSER
+BROWSER="qutebrowser" export BROWSER
+wallpaper="/home/$USER/wallpapers/wpp/$(ls /home/$USER/wallpapers/wpp/ | shuf -n 1)" 
+dwl -s dwl_bar &
+start_jack > /tmp/jack_log &
+sleep 1; 
+wal -i "$wallpaper" -b '#000000' &
+#swaybg -i "$wallpaper" & 
+wbg "$wallpaper" & 

@@ -1,0 +1,5 @@
+#!/bin/sh
+RANDOM=$(awk 'BEGIN {srand(); printf("%d", rand() * 256 * 256)}')
+quiz="$(sed -n "$RANDOM p" < /home/alice/text/db/sudoku/sudoku.csv | cut -d , -f 1)" 
+sudoku "$quiz" 
+printf "%s %s\n" "$(date)" "$quiz" >> /home/alice/text/db/sudoku/solves.txt

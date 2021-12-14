@@ -1,0 +1,1 @@
+tcc spnc.c -lncurses -o spnc 

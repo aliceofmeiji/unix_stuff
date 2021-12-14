@@ -1,0 +1,11 @@
+#!/bin/sh
+case "$1" in
+	http*)
+        	wget -q "$1" -O - > /tmp/xiv; sxiv -a /tmp/xiv
+		exit
+	;;
+	*)
+        	sxiv -a "$1"
+		exit
+	;;
+esac

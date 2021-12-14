@@ -1,0 +1,5 @@
+#!/bin/sh
+kill "$1"
+echo -n "play" > /tmp/mpv_mus/playpause
+mpv --no-video "$(cur_song)" --jack-port=mpv_mus --input-ipc-server=/tmp/mpv_mus/ipc;
+nextsong;

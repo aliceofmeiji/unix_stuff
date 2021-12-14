@@ -1,0 +1,2 @@
+#!/bin/sh
+printf "%d " `sed 's/^/0x/' < $@`

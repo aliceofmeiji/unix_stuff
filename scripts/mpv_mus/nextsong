@@ -1,0 +1,12 @@
+#!/bin/sh
+
+#while [ -z "$last_pid"]; do
+#done
+
+current_song="$(( $(cat /tmp/mpv_mus/current_song) + 1 ))"
+
+if [ $current_song -gt "$(wc -l < /tmp/mpv_mus/playlist)" ]; then current_song=1; 
+else if [ $current_song -lt 1 ]; then current_song="$(wc -l < /tmp/mpv_mus/playlist)"; fi
+fi
+
+change_cur_song $current_song

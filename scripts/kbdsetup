@@ -1,0 +1,6 @@
+#!/bin/sh
+setxkbmap us
+setxkbmap -option caps:swapescape
+xset r rate 200 20
+setxkbmap -option compose:paus
+setxkbmap -option compose:rctrl

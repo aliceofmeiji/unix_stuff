@@ -1,0 +1,2 @@
+#!/bin/sh
+ps -aux | grep mpv.*Musicas | grep -v grep | awk '{print $2}'

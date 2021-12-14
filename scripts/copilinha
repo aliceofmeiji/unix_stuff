@@ -1,0 +1,2 @@
+#!/bin/sh
+$MENU -i -l 10 < "$(file_menu /home/$USER/text)" | $CLIP

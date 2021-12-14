@@ -1,0 +1,5 @@
+#!/bin/sh
+pid="$(get_current_win_pid)"
+child="$(pgrep -P $pid)"
+realpath="$(realpath /proc/$child/cwd)"
+echo $realpath

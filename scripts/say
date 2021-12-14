@@ -1,0 +1,5 @@
+#!/bin/sh
+
+while read line; do
+	picospeaker "$line" 2>/dev/null
+done 

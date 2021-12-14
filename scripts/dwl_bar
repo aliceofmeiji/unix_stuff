@@ -1,0 +1,133 @@
+#!/bin/sh
+
+# This script takes the tag information from DWL from stdin.
+
+#************************************CONFIG*******************************************************#
+#Names in the order dtao sees them, check the index with dtao -xs <display no.>
+displays="DP-1"
+
+# colors are formated RRGGBB
+#active_color="#005577"
+active_color="#c79436"
+inactive_color="#222222"
+text_color="#eeeeee"
+urgent_bg_color="#eeeeee"
+urgent_text_color="#222222"
+font_size=14
+font_width_scale="0.58" # Adjust this if the tray isn't properly aligned on the right.
+#font_width_scale="2.9" # Adjust this if the tray isn't properly aligned on the right.
+
+font="monospace:pixelsize=$font_size"
+
+
+# The stdout of this funciton is displayed in the tray area on the right of the bar, one line at a time.
+# Lines are formated "DISPLAY_NAME tray <stuff to display>"
+# You can have different trays per display, or all the same like it is here.
+# Make sure the line is output all in one command, not in chunks, or things will break.
+tray(){
+	while true; do
+		for d in $displays; do
+
+			output="$d tray "
+			#output="$output $(cut -d ' ' -f 1-3 /proc/loadavg)"
+			#output="$output $(date '+%m-%d-%Y %H:%M:%S')"
+			#output="$output 50% | kalama ala li lon | 🔁 ⏹ | sex 13 ago 2021 10:59:03 -03"
+			#output="$output testtesttesttesttest"
+			#output="$output 50% | kalama ala li lon | / r | sex 13 ago 2021 10:59:03 -03"
+			output="$output $(tray_status)"
+			echo $output
+
+		done
+
+		# How often the tray area updates
+		sleep 1
+	done
+}
+
+
+
+
+#************************************BORING SCRIPT STUFF******************************************#
+
+# This function spawns the dtao instances for each display.
+bar(){
+
+	cat -- | tee /dev/stderr |\
+		awk 'BEGIN {
+		mtags=0;
+		ctags=0;
+		urg=0;
+		layout="[]=";
+		selmon=0;
+		acolor="'$active_color'";
+		icolor="'$inactive_color'";
+		tcolor="'$text_color'";
+		fontw="'$font_size'";
+		fontscale="'$font_width_scale'";
+		urgbg="'$urgent_bg_color'";
+		urgfg="'$urgent_text_color'";
+		display="'$1'"
+	}
+
+
+	$1 == display {
+		if ($2 == "tags") {
+			mtags=$4;
+			ctags=$3;
+			#sel is not used in this script
+			urg=$6;
+		}
+		else if ($2 == "layout") {
+			$1 = $2 = "";
+			layout = substr($0, 3);
+		}
+		else if ($2 == "title") {
+			$1 = $2 = "";
+			gsub(/\^/, "^^" );
+			title = substr($0, 3);
+		}
+		else if ($2 == "selmon") {
+			selmon=$3;
+		}
+		else if ($2 == "tray" ) {
+			$1 = $2 = "";
+			gsub(/\^/, "^^" );
+			tray = substr($0, 3);
+		}
+
+		for (i=0; i <= 8; i++) {
+			if ( urg != "" && int(urg / 2^i) % 2 == 1 ) {
+				printf "^bg(%s)^fg(%s)", urgbg, urgfg
+				printf "%s%d ", (int(ctags / (2^i) ) % 2 == 1 ? "*" : " "), i+1;
+				printf "^fg(%s)", tcolor
+			}
+			else {
+				printf "^bg(%s)", (int(mtags / (2^i) ) % 2 == 1 ? acolor : icolor);
+				printf "%s%d ", (int(ctags / (2^i) ) % 2 == 1 ? "*" : " "), i+1;
+			}
+
+		}
+		printf "^bg(%s) %s ", icolor, layout;
+		printf "^bg(%s) %-1000.1000s", (selmon == 1 ? acolor : icolor), title;
+		printf "^pa(_RIGHT)^p(-%d)^bg(%s) %-500.500s", ((2+length(tray))*(fontw*fontscale)), icolor, tray;
+		print""
+
+		#Flush the buffer
+		system("");
+
+	}' | dtao -z -z -L b -ta l -bg "$inactive_color" -fg "$text_color" -fn "$font" -xs $2
+}
+
+barcmd=""
+i=0
+for d in $displays; do
+	i=$((i+1))
+	if [ -n "$barcmd" ]; then
+		barcmd="$barcmd 2>&1 |"
+	fi
+	barcmd="$barcmd bar $d $i"
+done
+
+barcmd="$barcmd 2>/dev/null"
+
+( tray & cat -- ) | eval "$barcmd"

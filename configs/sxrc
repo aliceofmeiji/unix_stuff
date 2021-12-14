@@ -1,0 +1,20 @@
+#!/bin/sh
+MENU=dmenu export MENU
+CLIP="xclip -r -selection c" export CLIP
+xrandr --output "HDMI-A-0" --off
+wpp="$(ls /home/$USER/wallpapers/wpp/ | shuf -n 1)"
+setwpp "/home/$USER/wallpapers/wpp/$wpp"
+xrandr --output "HDMI-A-0" --off
+kbdsetup &
+sxhkd -m 1 &
+data.sh &
+picom &
+sxhkd -m 1 &
+start_jack > /tmp/jack-log &
+dwm
+exit
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+fcitx &

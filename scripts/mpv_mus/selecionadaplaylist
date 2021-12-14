@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+musica=$(cat /tmp/mpv_mus/playlist | nl -n ln | $MENU -i -l 10 | sed "s/ .*//g")
+[ -z $musica ] && exit;
+change_cur_song $musica

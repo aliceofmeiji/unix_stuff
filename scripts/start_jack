@@ -1,0 +1,16 @@
+#!/bin/sh
+#jack_control dps device hw:$(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://"),0
+#jack_control ds alsa
+#jack_control dps device hw:1,0
+#jack_control dps rate 48000
+#jack_control dps nperiods 2
+#jack_control dps period 512
+#jack_control start
+JACK_NO_AUDIO_RESERVATION=1 jackd -R -u -d alsa -D -H -d hw:$(aplay -l | sed -n "/Generic/ p" | sed "s/://" | sed -n 1p | awk '{ print $2 }'),0 -n 2 -p 512 -X seq &
+sleep 2 
+a2jmidid -e &
+sleep 2
+alsa_out -d hw:$(aplay -l | sed -n "/HDMI/ p" | sed -n "/device 9/ p" | cut -d ' ' -f2 | sed "s/://"),9 &
+sleep 2
+#start_sad > /tmp/sad-log
+start_mpv_mus >> /tmp/mpv_mus_log 2>&1

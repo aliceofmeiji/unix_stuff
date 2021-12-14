@@ -1,0 +1,8 @@
+#!/bin/sh
+status=$(cat /tmp/mpv_mus/status)
+
+if [ "$repeat" = "repeat" ]; then
+	echo random | nc -U /tmp/sad-sock -q 0
+else
+	echo repeat | nc -U /tmp/sad-sock -q 0
+fi

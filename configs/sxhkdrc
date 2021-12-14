@@ -1,0 +1,81 @@
+XF86AudioRaiseVolume
+	amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://") sset Master 1+; killall data.sh; data.sh
+XF86AudioLowerVolume
+	amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://") sset Master 1-; killall data.sh; data.sh
+XXF86AudioMute
+	amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://") sset Master toggle; killall data.sh; data.sh
+#Print
+#	ffmpeg -f x11grab -video_size 1360x768 -i $DISPLAY -vframes 1 /tmp/saida.png -y | convert -crop "$(xrectsel)" png:/tmp/saida.png /tmp/saida.png; xclip -t image/png -selection clipboard -display "$DISPLAY" /tmp/saida.png
+Print + shift
+	ffmpeg -y -f x11grab -video_size 1360x768 -i $DISPLAY -vframes 1 /tmp/saida.png; convert -crop "$(xrectsel)" png:/tmp/saida.png /tmp/saida.png; xclip -t image/png -selection clipboard -display "$DISPLAY" /tmp/saida.png
+
+Print
+	xwd -root -display "$DISPLAY" | convert xwd:- png:- | convert -crop "$(xrectsel)" png:- /tmp/saida.png; xclip -t image/png -selection clipboard -display "$DISPLAY" /tmp/saida.png
+XF86AudioPlay
+	AREA=$(xrectsel | sed 'y/x+/::/'); ffmpeg -y -f x11grab -s 1360x768 -i "$DISPLAY.0" ~/Recordings/output.mkv; ffmpeg -i ~/Recordings/output.mkv -filter:v "crop=$AREA" -y /tmp/saida.mp4
+XF86AudioStop
+	killall ffmpeg
+super + equal
+	amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://") sset Master 1+; killall data.sh; data.sh
+super + minus
+	amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://") sset Master 1-; killall data.sh; data.sh
+super + d
+	dolphin-emu-nogui "$(ls /home/$USER/ISOs/*.iso | $MENU -l 10)"
+#super + q 
+#	tabbed -o grey -O black surf -e
+super + q
+	qutebrowser
+super + j
+	jack_connect "$(jack_lsp | $MENU -i -l 10)" "$(jack_lsp | $MENU -i -l 10)"
+super + shift + j
+	jack_disconnect "$(jack_lsp | $MENU -i -l 10)" "$(jack_lsp | $MENU -i -l 10)"
+super + shift + q
+	selecionamusicaaleatoria
+super + shift + t
+	appendmusicaaleatoria
+super + shift + n 
+	nextsong
+super + shift + p
+	prevsong
+super + shift + space
+	playpause
+super + shift + a
+	selecionaplaylist
+super + shift + e
+	queuesongs
+super + shift + r
+	randomrepeat
+super + shift + s
+	selecionadaplaylist
+super + shift + m
+	mdl "$(xclip -selection clipboard -o)"
+super + m
+	mpv "$(xclip -selection clipboard -o)"
+super + p
+	dmenu_run
+super + t
+	xterm
+super + u
+	dmenuunicode 
+super + e 
+	dmenuemoji 
+super + Cyrillic_el
+	st
+super + g
+	gimp
+super + y
+	copicola | xclip -selection c
+super + k
+	selectkanji | xclip -selection c
+super + n
+	notepad | xclip -selection c
+super + x
+	encana clipboard 
+super + c
+	encana primary 
+button8
+	encana clipboard 
+button9
+	encana primary 
+super + v
+	xmenu < /tmp/xmenu

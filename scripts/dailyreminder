@@ -1,0 +1,11 @@
+#!/bin/sh
+
+aniversario=$(sed -n "/$(date +%d\\/%m)/ p" ~/text/aniversarios)
+
+if [ -z "$aniversario" ]
+then
+	#echo "Sem aniversários hoje :)" | sent
+	exit;
+else
+	echo $aniversario
+fi;
