@@ -1,0 +1,6 @@
+#!/bin/sh
+
+eval "$(crud)"
+
+berryc window_resize_absolute $W $H
+berryc window_move_absolute $X $Y

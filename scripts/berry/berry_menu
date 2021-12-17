@@ -1,0 +1,2 @@
+#!/bin/sh
+$(xmenu < /home/$USER/.local/bin/berry/menu)

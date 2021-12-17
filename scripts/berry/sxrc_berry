@@ -1,0 +1,7 @@
+MENU=dmenu export MENU
+CLIP="xclip -r -selection c" export CLIP
+sxhkd -c /home/$USER/.config/sxhkd/sxhkdrc_berry &
+kbdsetup &
+setwpp wallpapers/wpp/hibiscus.png
+xrdb -merge /home/$USER/.Xresources
+berry
