@@ -1,0 +1,16 @@
+DEFAULT: https://duckduckgo.com/?q={}
+aur: https://aur.archlinux.org/packages/?O=0&K={}
+aw: https://wiki.archlinux.org/index.php?search={}
+dict: https://www.merriam-webster.com/dictionary/{}
+dp: https://desciclopedia.org/index.php?search={}
+mcw: https://minecraft.gamepedia.com/Special:Search?search={}
+ml: https://lista.mercadolivre.com.br/{}
+nw: https://nethackwiki.com/mediawiki/index.php?search={}
+qh: https://help.quero.space/front/ticket.form.php?id={}
+tw: https://en.touhouwiki.net/index.php?search={}
+w: https://pt.wikipedia.org/w/index.php?title=Special:Search&search={}
+we: https://en.wikipedia.org/w/index.php?title=Special:Search&search={}
+y: https://www.youtube.com/results?search_query={}
+i: https://duckduckgo.com/?q={}&iax=images&ia=images
+so: https://stackoverflow.com/search?q={}
+urban: https://www.urbandictionary.com/define.php?term={}
