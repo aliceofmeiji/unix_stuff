@@ -1,0 +1,6 @@
+#!/bin/sh
+
+eval "$(xwininfo -root | grep -e Width -e Height | sed 's/: /=/;s/^ *//')"
+
+berryc window_resize_absolute $Width $Height
+berryc window_move_absolute 0 0
