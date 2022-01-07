@@ -1,0 +1,10 @@
+MENU=dmenu export MENU
+CLIP="xclip -r -selection c" export CLIP
+cat .local/share/sequences
+#sxhkd -c /home/$USER/.config/sxhkd/sxhkdrc_berry &
+sxhkd &
+kbdsetup &
+setwpp wallpapers/wpp/hibiscus.png
+xrdb -merge /home/$USER/.Xresources
+(sleep 1; berryc inner_focus_color 8a5176; berryc edge_gap 0 0 0 0) &
+berry
