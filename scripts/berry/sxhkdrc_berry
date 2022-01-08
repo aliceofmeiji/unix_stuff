@@ -1,9 +1,9 @@
 XF86AudioRaiseVolume
-	amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://") sset Master 1+; killall data.sh; data.sh
+	volctl +5
 XF86AudioLowerVolume
-	amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://") sset Master 1-; killall data.sh; data.sh
+	volctl -5
 XXF86AudioMute
-	amixer -c $(aplay -l | sed -n "/Generic/ p" | sed -n "/device 0/ p" | cut -d ' ' -f2 | sed "s/://") sset Master toggle; killall data.sh; data.sh
+	volctl 0
 #Print
 #	ffmpeg -f x11grab -video_size 1360x768 -i $DISPLAY -vframes 1 /tmp/saida.png -y | convert -crop "$(xrectsel)" png:/tmp/saida.png /tmp/saida.png; xclip -t image/png -selection clipboard -display "$DISPLAY" /tmp/saida.png
 Print + shift

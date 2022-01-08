@@ -1,0 +1,26 @@
+#!/bin/sh
+
+VOLUME="$(mixerctl outputs.master | cut -d = -f 2 -d , -f 2)"
+
+[ -z "$1" ] && printf "Usage:\nvolctl vol\nvolctl +vol\nvolctl -vol\n" && exit;
+
+VALUE="${1#+}"
+VALUE="${VALUE#-}"
+
+case "$1" in
+	+*)	NEWVOL=$((VOLUME + VALUE)); 
+		if [ $NEWVOL -gt 255 ]; 
+			then NEWVOL=255;
+		fi;;
+
+	-*)	NEWVOL=$((VOLUME - VALUE)); 
+		if [ $NEWVOL -lt 0 ]; 
+			then NEWVOL=0;
+		fi;;
+	
+	*)	NEWVOL=$VALUE ;;
+esac
+
+mixerctl -w outputs.master=$NEWVOL
+
+mixerctl outputs.master | cut -d = -f 2 -d , -f 2
