@@ -1,0 +1,2 @@
+#!/bin/sh
+xwd -root -display "$DISPLAY" | convert xwd:- png:- | convert -crop "$(crud | grep G | cut -d = -f 2)" png:- /tmp/saida.png; xclip -t image/png -selection clipboard -display "$DISPLAY" /tmp/saida.png
