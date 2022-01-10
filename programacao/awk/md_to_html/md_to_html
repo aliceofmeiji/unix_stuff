@@ -1,0 +1,176 @@
+#!/usr/bin/awk -f
+
+BEGIN {
+	print "<html>"
+	print "<meta charset=\"UTF-8\">"
+	print "<head>"
+	print "<style>"
+	while(getline < "style.css") {
+		print 
+	}
+	print "</style>"
+	print "</head>"
+	print "<body>"
+}
+
+# horizontal rules
+/^\*\*\*|^---|^___/ {
+	print "<hr>"
+	next
+}
+
+# render files
+/!\[.*\]\(.*\)/ {
+	src = $0
+	name = $0
+
+	sub(/!\[/, "", name)
+	sub(/\].*$/, "", name)
+
+	sub(/!\[.*\]\(/, "", src)
+	sub(/\)$/, "", src)
+
+	print "<img src=\"" src "\" alt=\"" name "\">"
+	next
+}
+
+{
+	#blockquotes
+	last_bq = bq;
+	if($0 ~ /^>/) { bq = 1; sub(/^>/, "") }
+	else { bq = 0 }
+
+	#ordered lists
+	last_ol = ol;
+	if($0 ~ /^[0-9]+\. /) { ol = 1; sub(/^[0-9]+\. /, "") }
+	else { ol = 0 }
+
+	#unordered lists
+	last_ul = ul;
+	if($0 ~ /^[-*+] /) { ul = 1; sub(/^[-*+] /, "") }
+	else { ul = 0 }
+
+	#simple line
+	printed = 0;
+	line = ""
+
+	#handle links
+	while(match($0, /\[.*\]\(.*\)/)) {
+		link = substr($0, RSTART, RLENGTH)
+
+		url = link
+		name = link
+
+		sub(/\[/, "", name)
+		sub(/\].*$/, "", name)
+
+		sub(/\[.*\]\(/, "", url)
+		sub(/\)$/, "", url)
+
+		out = "<a href=\"" url "\">" name "</a>"
+
+		sub(/\[.*\]\(.*\)/, out)
+	}
+
+	#handle bold, strikethrough and em
+	nsemb =	gsub(/\*\*\*/, "<b><em>")
+	nsb =	gsub(/\*\*/, "<b>")
+	nsem =	gsub(/\*/, "<em>")
+	nss =	gsub(/~~/, "<s>")
+
+	if(nsemb > 0 || nsb > 0)
+	{
+		nbolds = split($0, bolds, "<b>")
+		for(i = 0; i <= nbolds; i++)
+		{
+			if(i % 2 == 1) { line = line bolds[i] }
+			else { line = line "<b>" bolds[i] "</b>" }
+		}
+		$0 = line
+		line = ""
+	}
+
+	if(nsemb > 0 || nsem > 0)
+	{
+		nem = split($0, em, "<em>")
+		for(i = 0; i <= nem; i++)
+		{
+			if(i % 2 == 1) { line = line em[i] }
+			else { line = line "<em>" em[i] "</em>" }
+		}
+		$0 = line
+		line = ""
+	}
+
+	if(nss > 0)
+	{
+		nstrike = split($0, strike, "<s>")
+		for(i = 0; i <= nstrike; i++)
+		{
+			if(i % 2 == 1) { line = line strike[i] }
+			else { line = line "<s>" strike[i] "</s>" }
+		}
+		$0 = line
+		line = ""
+	}
+	
+	#remove trash created by last actions
+	sub("^<b></b>", "")
+	sub("^<em></em>", "")
+	sub("^<s></s>", "")
+	sub("^<b></b>", "")
+	sub("^<em></em>", "")
+	sub("^<s></s>", "")
+}
+
+/^#/ {
+	hs = length($1)
+	$1 = ""
+	printf("<h%d>%s</h%d>\n", hs, $0, hs)
+	printed = 1;
+}
+
+printed == 0 {
+	#handle blockquotes, (un)?ordered lists, if not, print paragraph
+	if(bq == 1 && last_bq == 0) {
+		print "<blockquote>"
+		print
+	}
+	else if(bq == 1 && last_bq == 1) {
+		print
+	}
+	else if(bq == 0 && last_bq == 1) {
+		if($0 != "") { print }
+		print "</blockquote>"
+	}
+	else if(ol == 1 && last_ol == 0) {
+		print "<ol>"
+		print "<li>" $0 "</li>"
+	}
+	else if(ol == 1 && last_ol == 1) {
+		print "<li>" $0 "</li>"
+	}
+	else if(ol == 0 && last_ol == 1) {
+		if($0 != "") { print "<li>" $0 "</li>" }
+		print "</ol>"
+	}
+	else if(ul == 1 && last_ul == 0) {
+		print "<ul>"
+		print "<li>" $0 "</li>"
+	}
+	else if(ul == 1 && last_ul == 1) {
+		print "<li>" $0 "</li>"
+	}
+	else if(ul == 0 && last_ul == 1) {
+		if($0 != "") { print "<li>" $0 "</li>" }
+		print "</ul>"
+	}
+	else {
+		print "<p>" $0 "</p>"
+	}
+}
+
+END {
+	print "</body>"
+	print "</html>"
+}
