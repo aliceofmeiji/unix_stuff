@@ -69,23 +69,15 @@ BEGIN {
 	printed = 0;
 	line = ""
 
-	#handle links
-	while(match($0, /\[.*\]\(.*\)/)) {
-		link = substr($0, RSTART, RLENGTH)
-
-		url = link
-		name = link
-
-		sub(/\[/, "", name)
-		sub(/\].*$/, "", name)
-
-		sub(/\[.*\]\(/, "", url)
-		sub(/\)$/, "", url)
-
-		out = "<a href=\"" url "\">" name "</a>"
-
-		sub(/\[.*\]\(.*\)/, out)
+	#links
+	nlinks = split($0, arr, /[\[\]\(\)]/); 
+	for(i = 1; i <= nlinks; i += 4) {
+		#print i, arr[i]
+		line = line arr[i] "<a href=\"" arr[i+3] "\">" arr[i+1] "</a>"
 	}
+	sub(/<a href=""><\/a>/, "", line)
+	$0 = line
+	line = ""
 
 	#handle bold, strikethrough, em and code
 	nsemb =	gsub(/\*\*\*/, "<b><em>")
