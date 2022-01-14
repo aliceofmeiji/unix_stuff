@@ -40,6 +40,19 @@ BEGIN {
 	if($0 ~ /^>/) { bq = 1; sub(/^>/, "") }
 	else { bq = 0 }
 
+	#codeblocks
+	lang = ""
+	last_cb = cb;
+	if($0 ~ /^```/) { 
+		if(opencb == 0) {
+			cb = 1; sub(/^```/, "")
+			lang = $1
+			$0 = "" 
+			opencb = 1
+		} else { opencb = 0; next }
+	}
+	else { cb = 0 }
+
 	#ordered lists
 	last_ol = ol;
 	if($0 ~ /^[0-9]+\. /) { ol = 1; sub(/^[0-9]+\. /, "") }
@@ -72,11 +85,12 @@ BEGIN {
 		sub(/\[.*\]\(.*\)/, out)
 	}
 
-	#handle bold, strikethrough and em
+	#handle bold, strikethrough, em and code
 	nsemb =	gsub(/\*\*\*/, "<b><em>")
 	nsb =	gsub(/\*\*/, "<b>")
 	nsem =	gsub(/\*/, "<em>")
 	nss =	gsub(/~~/, "<s>")
+	nsc =	gsub(/`/, "<code>")
 
 	if(nsemb > 0 || nsb > 0)
 	{
@@ -113,14 +127,28 @@ BEGIN {
 		$0 = line
 		line = ""
 	}
+
+	if(nsc > 0)
+	{
+		ncode = split($0, code, "<code>")
+		for(i = 0; i <= ncode; i++)
+		{
+			if(i % 2 == 1) { line = line code[i] }
+			else { line = line "<code>" code[i] "</code>" }
+		}
+		$0 = line
+		line = ""
+	}
 	
 	#remove trash created by last actions
 	sub("^<b></b>", "")
 	sub("^<em></em>", "")
 	sub("^<s></s>", "")
+	sub("^<code></code>", "")
 	sub("^<b></b>", "")
 	sub("^<em></em>", "")
 	sub("^<s></s>", "")
+	sub("^<code></code>", "")
 }
 
 /^#/ {
@@ -131,8 +159,22 @@ BEGIN {
 }
 
 printed == 0 {
-	#handle blockquotes, (un)?ordered lists, if not, print paragraph
-	if(bq == 1 && last_bq == 0) {
+	#handle blockquotes, (un)?ordered lists, codeblocks, if not, print paragraph
+
+	#codeblocks
+	if(cb == 1 && last_cb == 0) {
+		print "<pre class=\"" lang "\"><code>"
+	}
+	else if(cb == 1 && last_cb == 1) {
+		print
+	}
+	else if(cb == 0 && last_cb == 1) {
+		if($0 !~ /^[ \t]*$/) { print }
+		print "</code></pre>"
+	}
+	
+	#blockquotes
+	else if(bq == 1 && last_bq == 0) {
 		print "<blockquote>"
 		print
 	}
@@ -143,6 +185,8 @@ printed == 0 {
 		if($0 != "") { print }
 		print "</blockquote>"
 	}
+
+	#ordered list
 	else if(ol == 1 && last_ol == 0) {
 		print "<ol>"
 		print "<li>" $0 "</li>"
@@ -151,9 +195,11 @@ printed == 0 {
 		print "<li>" $0 "</li>"
 	}
 	else if(ol == 0 && last_ol == 1) {
-		if($0 != "") { print "<li>" $0 "</li>" }
+		if($0 !~ /^[ \t]*$/) { print "<li>" $0 "</li>" }
 		print "</ol>"
 	}
+
+	#unordered list
 	else if(ul == 1 && last_ul == 0) {
 		print "<ul>"
 		print "<li>" $0 "</li>"
@@ -162,9 +208,11 @@ printed == 0 {
 		print "<li>" $0 "</li>"
 	}
 	else if(ul == 0 && last_ul == 1) {
-		if($0 != "") { print "<li>" $0 "</li>" }
+		if($0 !~ /^[ \t]*$/) { print "<li>" $0 "</li>" }
 		print "</ul>"
 	}
+
+	#normal line
 	else {
 		print "<p>" $0 "</p>"
 	}
