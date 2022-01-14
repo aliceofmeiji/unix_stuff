@@ -1,11 +1,13 @@
 #!/usr/bin/awk -f
 
 BEGIN {
+	if(style == "") { style = "style.css" }
+
 	print "<html>"
 	print "<meta charset=\"UTF-8\">"
 	print "<head>"
 	print "<style>"
-	while(getline < "style.css") {
+	while(getline < style) {
 		print 
 	}
 	print "</style>"
