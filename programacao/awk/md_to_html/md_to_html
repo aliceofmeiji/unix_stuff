@@ -5,14 +5,23 @@ BEGIN {
 
 	print "<html>"
 	print "<meta charset=\"UTF-8\">"
-	print "<head>"
-	print "<style>"
-	while(getline < style) {
-		print 
+	if(system("[ -f " style " ]") == 0) {
+		print "<head>"
+		print "<style>"
+		while(getline < style) {
+			print 
+		}
+		print "</style>"
+		print "</head>"
 	}
-	print "</style>"
-	print "</head>"
 	print "<body>"
+}
+
+# title
+/^% / {
+	sub(/^% /, "")
+	print "<title>" $0 "</title>"
+	next
 }
 
 # horizontal rules
@@ -37,10 +46,6 @@ BEGIN {
 }
 
 {
-	#blockquotes
-	last_bq = bq;
-	if($0 ~ /^>/) { bq = 1; sub(/^>/, "") }
-	else { bq = 0 }
 
 	#codeblocks
 	lang = ""
@@ -55,94 +60,103 @@ BEGIN {
 	}
 	else { cb = 0 }
 
-	#ordered lists
-	last_ol = ol;
-	if($0 ~ /^[0-9]+\. /) { ol = 1; sub(/^[0-9]+\. /, "") }
-	else { ol = 0 }
+	if(opencb == 0) { #if inside code block
 
-	#unordered lists
-	last_ul = ul;
-	if($0 ~ /^[-*+] /) { ul = 1; sub(/^[-*+] /, "") }
-	else { ul = 0 }
+		#blockquotes
+		last_bq = bq;
+		if($0 ~ /^>/) { bq = 1; sub(/^>/, "") }
+		else { bq = 0 }
 
-	#simple line
-	printed = 0;
-	line = ""
+		#ordered lists
+		last_ol = ol;
+		if($0 ~ /^[0-9]+\. /) { ol = 1; sub(/^[0-9]+\. /, "") }
+		else { ol = 0 }
 
-	#links
-	nlinks = split($0, arr, /[\[\]\(\)]/); 
-	for(i = 1; i <= nlinks; i += 4) {
-		#print i, arr[i]
-		line = line arr[i] "<a href=\"" arr[i+3] "\">" arr[i+1] "</a>"
-	}
-	sub(/<a href=""><\/a>/, "", line)
-	$0 = line
-	line = ""
+		#unordered lists
+		last_ul = ul;
+		if($0 ~ /^[-*+] /) { ul = 1; sub(/^[-*+] /, "") }
+		else { ul = 0 }
 
-	#handle bold, strikethrough, em and code
-	nsemb =	gsub(/\*\*\*/, "<b><em>")
-	nsb =	gsub(/\*\*/, "<b>")
-	nsem =	gsub(/\*/, "<em>")
-	nss =	gsub(/~~/, "<s>")
-	nsc =	gsub(/`/, "<code>")
+		#simple line
+		printed = 0;
+		line = ""
 
-	if(nsemb > 0 || nsb > 0)
-	{
-		nbolds = split($0, bolds, "<b>")
-		for(i = 0; i <= nbolds; i++)
-		{
-			if(i % 2 == 1) { line = line bolds[i] }
-			else { line = line "<b>" bolds[i] "</b>" }
+		#links
+		nlinks = split($0, arr, /[\[\]\(\)]/); 
+		for(i = 1; i <= nlinks; i += 4) {
+			#print i, arr[i]
+			line = line arr[i] "<a href=\"" arr[i+3] "\">" arr[i+1] "</a>"
 		}
+		sub(/<a href=""><\/a>/, "", line)
 		$0 = line
 		line = ""
-	}
 
-	if(nsemb > 0 || nsem > 0)
-	{
-		nem = split($0, em, "<em>")
-		for(i = 0; i <= nem; i++)
-		{
-			if(i % 2 == 1) { line = line em[i] }
-			else { line = line "<em>" em[i] "</em>" }
-		}
-		$0 = line
-		line = ""
-	}
+		#handle bold, strikethrough, em and code
+		nsemb =	gsub(/\*\*\*/, "<b><em>")
+		nsb =	gsub(/\*\*/, "<b>")
+		nsem =	gsub(/\*/, "<em>")
+		nss =	gsub(/~~/, "<s>")
+		nsc =	gsub(/`/, "<code>")
 
-	if(nss > 0)
-	{
-		nstrike = split($0, strike, "<s>")
-		for(i = 0; i <= nstrike; i++)
+		if(nsemb > 0 || nsb > 0)
 		{
-			if(i % 2 == 1) { line = line strike[i] }
-			else { line = line "<s>" strike[i] "</s>" }
+			nbolds = split($0, bolds, "<b>")
+			for(i = 0; i <= nbolds; i++)
+			{
+				if(i % 2 == 1) { line = line bolds[i] }
+				else { line = line "<b>" bolds[i] "</b>" }
+			}
+			$0 = line
+			line = ""
 		}
-		$0 = line
-		line = ""
-	}
 
-	if(nsc > 0)
-	{
-		ncode = split($0, code, "<code>")
-		for(i = 0; i <= ncode; i++)
+		if(nsemb > 0 || nsem > 0)
 		{
-			if(i % 2 == 1) { line = line code[i] }
-			else { line = line "<code>" code[i] "</code>" }
+			nem = split($0, em, "<em>")
+			for(i = 0; i <= nem; i++)
+			{
+				if(i % 2 == 1) { line = line em[i] }
+				else { line = line "<em>" em[i] "</em>" }
+			}
+			$0 = line
+			line = ""
 		}
-		$0 = line
-		line = ""
-	}
-	
-	#remove trash created by last actions
-	sub("^<b></b>", "")
-	sub("^<em></em>", "")
-	sub("^<s></s>", "")
-	sub("^<code></code>", "")
-	sub("^<b></b>", "")
-	sub("^<em></em>", "")
-	sub("^<s></s>", "")
-	sub("^<code></code>", "")
+
+		if(nss > 0)
+		{
+			nstrike = split($0, strike, "<s>")
+			for(i = 0; i <= nstrike; i++)
+			{
+				if(i % 2 == 1) { line = line strike[i] }
+				else { line = line "<s>" strike[i] "</s>" }
+			}
+			$0 = line
+			line = ""
+		}
+
+		if(nsc > 0)
+		{
+			ncode = split($0, code, "<code>")
+			for(i = 0; i <= ncode; i++)
+			{
+				if(i % 2 == 1) { line = line code[i] }
+				else { line = line "<code>" code[i] "</code>" }
+			}
+			$0 = line
+			line = ""
+		}
+		
+		#remove trash created by last actions
+		sub("^<b></b>", "")
+		sub("^<em></em>", "")
+		sub("^<s></s>", "")
+		sub("^<code></code>", "")
+		sub("^<b></b>", "")
+		sub("^<em></em>", "")
+		sub("^<s></s>", "")
+		sub("^<code></code>", "")
+
+	} #if inside code block
 }
 
 /^#/ {
