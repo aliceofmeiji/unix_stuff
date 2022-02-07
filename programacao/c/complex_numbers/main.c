@@ -8,39 +8,39 @@ typedef struct
 	double i;
 } complex;
 
-complex e_to_i(double theta);
-complex mult(complex c, double r);
+complex add(complex a, complex b);
+complex mult(complex a, complex b);
 
 int main(int argc, char *argv[])
 {
-	//complex c = { sqrt(2), sqrt(2) };
-	//printf("%f %f\n", c.r, c.i);
+	complex z, c;
+	int i;
+	c.r = -0.25;
+	c.i = 0.25;
+	z.r = 1;
+	z.i = 1;
 
-	complex c;
-	double t = 0, r;
-	char color[9] = "FF0000FF";
-
-	sscanf(argv[1], "%lf", &r);
-	
-	for(t = 0; t < 2 * M_PI; t = t += 0.01)
+	for(i = 0; i < 10; i++)
 	{
-		c = mult(e_to_i(t), r);
-		printf("%d %d %s\n", (int)(c.r + r + 1), (int)(c.i + r + 1), color);
+		z = add(c, mult(z, z)); 
 	}
+	
+	printf("%lf %lf\n", z.r, z.i);
 }
 
-complex e_to_i(double theta)
+complex add(complex a, complex b)
 {
 	complex c;
-	c.r = cos(theta);
-	c.i = sin(theta);
+	c.r = (a.r + b.r);
+	c.i = (a.i + b.i);
 	return c;
 }
 
-complex mult(complex c, double r)
+complex mult(complex a, complex b)
 {
-	c.r *= r;
-	c.i *= r;
+	complex c;
+	c.r = (a.r * b.r) - (a.i * b.i);
+	c.i = (a.r * b.i) + (a.i * b.r);
 	return c;
 }
 
