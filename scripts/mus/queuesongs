@@ -1,0 +1,5 @@
+#!/bin/sh
+/usr/bin/ls /home/$USER/Musicas/ | shuf | $MENU -i -l 10 | while read line; do echo "/home/$USER/Musicas/$line"; done > $HOME/mus/queue
+sed "$(cat $HOME/mus/current_song)q" < $HOME/mus/playlist > $HOME/mus/first_part
+sed "1,$(cat $HOME/mus/current_song)d" < $HOME/mus/playlist > $HOME/mus/second_part
+cat $HOME/mus/first_part $HOME/mus/queue $HOME/mus/second_part > $HOME/mus/playlist

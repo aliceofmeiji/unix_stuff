@@ -1,0 +1,15 @@
+#!/bin/sh
+
+current_song="$(cat $HOME/mus/current_song)"
+
+if [ "$1" = "-f" ]; then
+	cat >> $HOME/mus/pl_temp
+else
+	sed "s/^/\/home\/$USER\/Musicas\//" >> $HOME/mus/pl_temp
+fi
+
+sed -n "1,${current_song} p" < $HOME/mus/playlist > $HOME/mus/pl_1
+sed -n "$((current_song + 1)),$ p" < $HOME/mus/playlist > $HOME/mus/pl_2
+
+cat $HOME/mus/pl_1 $HOME/mus/pl_temp $HOME/mus/pl_2 > $HOME/mus/playlist
+rm $HOME/mus/pl_1 $HOME/mus/pl_temp $HOME/mus/pl_2 

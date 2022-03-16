@@ -1,0 +1,7 @@
+#!/bin/sh
+
+playlist=$(ls /home/$USER/Musicas/.playlists/ | $MENU -i -l 10)
+
+[ -z "$playlist" ] && exit
+
+add_songs_to_playlist < "/home/$USER/Musicas/.playlists/$playlist"

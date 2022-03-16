@@ -1,0 +1,5 @@
+#!/bin/sh
+mkdir $HOME/mus
+touch $HOME/mus/playlist
+echo -n 1 > $HOME/mus/current_song
+echo -n pause > $HOME/mus/playpause

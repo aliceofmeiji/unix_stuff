@@ -1,0 +1,2 @@
+#!/bin/sh
+ls /home/$USER/Musicas/ | shuf | sed /623D55/d | $MENU -l 10 -i | add_songs_to_playlist

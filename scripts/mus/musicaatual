@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cur_song="$(cur_song)"
+
+if [ -z $cur_song ]; then
+	echo "kalama ala li lon";
+else
+	echo -n "$( echo "$cur_song" | sed 's/^.*\///g; s/\....$//g' )"
+fi

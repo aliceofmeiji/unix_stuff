@@ -1,0 +1,13 @@
+#!/bin/sh
+
+status="$(cat $HOME/mus/playpause)"
+
+pkill mpv play_cur_song;
+
+if [ "$status" = "pause" ]; then
+	echo -n "play" > $HOME/mus/playpause
+fi
+
+echo $1 > $HOME/mus/current_song
+
+play_cur_song "$$"

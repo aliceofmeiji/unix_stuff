@@ -1,0 +1,16 @@
+#!/bin/sh
+
+status="$(cat $HOME/mus/playpause)"
+pid="$(cur_song_pid)"
+
+if [ "$status" = "pause" ]; then
+	echo -n "play" > $HOME/mus/playpause
+	echo '{ "command": ["set_property", "pause", false] }' | nc -U $HOME/mus/ipc -q 0
+else 
+	if [ "$status" = "play" ]; then
+		echo -n "pause" > $HOME/mus/playpause
+		echo '{ "command": ["set_property", "pause", true] }' | nc -U $HOME/mus/ipc -q 0
+	fi
+fi
+
+if [ -z "$(cur_song_pid)" ]; then play_cur_song 0; fi

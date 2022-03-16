@@ -1,0 +1,2 @@
+#!/bin/sh
+sed -n "$(cat $HOME/mus/current_song)"p < $HOME/mus/playlist
