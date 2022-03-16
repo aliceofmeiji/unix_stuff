@@ -1,0 +1,2 @@
+#!/bin/sh
+curl "https://www.climatempo.com.br/previsao-do-tempo/agora/cidade/553/saojosedoscampos-sp" 2>&1 | htmlfmt | sed '/^$/d;/•/d' | awk '/Tempo agora em São José dos Campos, SP/,/hPa$/' | sed '1a\ ' | paste  - - | sed 's/esparsas Sensação/esparsas\nSensação/'

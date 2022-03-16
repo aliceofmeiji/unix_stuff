@@ -4,9 +4,15 @@
 #include "utilities.h"
 
 int doub(int);
+int triple(int);
 
 int main()
 {
+	vector list = vec_iota(5);
+	vector list_2 = vec_map(triple, list); //same as vvv
+	vec_print(list);
+	vec_print(list_2);
+/*
 	vec_print(vec_concat(vec_iota(3), vec_iota(5)));
 
 	vector listt = vec_drop(3, vec_iota(8));
@@ -32,10 +38,15 @@ int main()
 	vector m = vec_create(6);
 	m.arr = vals;
 	vec_print(vec_in(m, vec_iota(6)));
-
+*/
 }
 
 int doub(int in)
 {
 	return in * 2;
+}
+
+int triple(int in)
+{
+	return in * 3;
 }
