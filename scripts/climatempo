@@ -1,0 +1,5 @@
+#!/bin/sh
+cidade=3694
+token=7e73a04baa9f288988a58a446583e99d
+#curl -X PUT "http://apiadvisor.climatempo.com.br/api-manager/user-token/$token/locales" -H 'Content-Type: application/x-www-form-urlencoded' -d "localeId[]=$sjc"
+curl -s -i "http://apiadvisor.climatempo.com.br/api/v1/weather/locale/$cidade/current?token=$token" | sed -n '$p'

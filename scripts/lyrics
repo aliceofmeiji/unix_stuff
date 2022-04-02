@@ -1,0 +1,6 @@
+#!/bin/sh
+
+artist="$1"
+title="$2"
+
+curl -s --get "https://makeitpersonal.co/lyrics" --data-urlencode "artist=$artist" --data-urlencode "title=$title"

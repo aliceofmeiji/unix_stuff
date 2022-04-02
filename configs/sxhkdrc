@@ -79,3 +79,5 @@ button9
 	encana primary 
 super + v
 	xmenu < /tmp/xmenu
+super + a
+	kolourpaint
