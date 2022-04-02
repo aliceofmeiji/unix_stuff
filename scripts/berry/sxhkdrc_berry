@@ -127,3 +127,5 @@ alt + shift + z
 	berry_fs
 alt + p
 	$(dmenu_path | sed 1d | dmenu)	
+super + a
+	kolourpaint
