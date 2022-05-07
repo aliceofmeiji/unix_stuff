@@ -118,7 +118,7 @@ alt + shift + 0
 super + v
 	berry_menu
 alt + shift + Return
-	xterm -fs 14
+	urxvt
 alt + shift + c
 	berryc window_close
 alt + shift + x
