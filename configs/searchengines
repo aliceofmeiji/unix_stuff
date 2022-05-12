@@ -14,3 +14,4 @@ y: https://www.youtube.com/results?search_query={}
 i: https://duckduckgo.com/?q={}&iax=images&ia=images
 so: https://stackoverflow.com/search?q={}
 urban: https://www.urbandictionary.com/define.php?term={}
+wn: https://en.wiktionary.org/wiki/{}
