@@ -1,0 +1,2 @@
+#!/bin/sh
+$MENU < ~/.local/share/nimiponaale | encode_sitelen_pona | xclip -r -i -selection c
