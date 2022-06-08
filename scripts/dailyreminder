@@ -1,11 +1,11 @@
 #!/bin/sh
 
-aniversario=$(sed -n "/$(date +%d\\/%m)/ p" ~/text/aniversarios)
+remind=$(sed -n "/$(date +%d\\/%m)/ p" ~/text/aniversarios ~/text/calendar)
 
-if [ -z "$aniversario" ]
+if [ -z "$remind" ]
 then
 	#echo "Sem aniversários hoje :)" | sent
 	exit;
 else
-	echo $aniversario
+	echo $remind
 fi;

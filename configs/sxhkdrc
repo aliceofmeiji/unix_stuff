@@ -81,3 +81,5 @@ super + v
 	xmenu < /tmp/xmenu
 super + a
 	kolourpaint
+super + s
+	dmenusitelenpona

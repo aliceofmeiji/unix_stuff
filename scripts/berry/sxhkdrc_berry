@@ -129,3 +129,5 @@ alt + p
 	$(dmenu_path | sed 1d | dmenu)	
 super + a
 	kolourpaint
+super + s
+	dmenusitelenpona
