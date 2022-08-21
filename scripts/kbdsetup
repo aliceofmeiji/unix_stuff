@@ -1,5 +1,6 @@
 #!/bin/sh
-setxkbmap us
+#setxkbmap us
+setxkbmap -layout us,ru -option grp:shifts_toggle
 setxkbmap -option caps:swapescape
 xset r rate 200 20
 setxkbmap -option compose:paus
