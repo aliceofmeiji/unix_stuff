@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "$PATH" | tr ':' '\n' | while read p; do
+	ls -d $p/* | grep "^$p/$1$" 
+done 2>/dev/null

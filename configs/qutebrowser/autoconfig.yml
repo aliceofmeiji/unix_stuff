@@ -139,3 +139,5 @@ settings:
       so: https://stackoverflow.com/search?q={}
       urban: https://www.urbandictionary.com/define.php?term={}
       wn: https://en.wiktionary.org/wiki/{}
+      map: https://www.openstreetmap.org/search?query={}
+      pkmn: https://bulbapedia.bulbagarden.net/wiki/index.php?search={}
