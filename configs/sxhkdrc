@@ -47,6 +47,10 @@ super + shift + r
 	randomrepeat
 super + shift + s
 	mpc play "$(mpc playlist | nl -n ln | $MENU -l 10 -i | cut -f 1 | tr -dc 0-9)"
+super + shift + equal
+	mpc vol +5
+super + shift + minus
+	mpc vol -5
 super + shift + m
 	mdl "$(xclip -selection clipboard -o)"
 super + m
