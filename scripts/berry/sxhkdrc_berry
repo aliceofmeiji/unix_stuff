@@ -28,15 +28,15 @@ super + j
 super + shift + j
 	jack_disconnect "$(jack_lsp | $MENU -i -l 10)" "$(jack_lsp | $MENU -i -l 10)"
 super + shift + q
-	selecionamusicaaleatoria
+	ls Musicas/ | shuf | $MENU -l 10 -i | mpc add
 super + shift + t
-	appendmusicaaleatoria
+	ls Musicas/ | shuf | $MENU -l 10 -i | mpc insert
 super + shift + n 
-	nextsong
+	mpc next
 super + shift + p
-	prevsong
+	mpc prev
 super + shift + space
-	playpause
+	mpc toggle
 super + shift + a
 	selecionaplaylist
 super + shift + e
@@ -44,7 +44,7 @@ super + shift + e
 super + shift + r
 	randomrepeat
 super + shift + s
-	selecionadaplaylist
+	mpc play "$(mpc playlist | nl -n ln | $MENU -l 10 -i | cut -f 1 | tr -dc 0-9)"
 super + shift + m
 	mdl "$(xclip -selection clipboard -o)"
 super + m
